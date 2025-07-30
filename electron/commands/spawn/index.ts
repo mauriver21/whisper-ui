@@ -3,8 +3,8 @@ import {
   spawn as nodeSpawn,
 } from 'child_process';
 import { v4 as uuid } from 'uuid';
-import { singleton } from 'electron/singleton';
-import { ElectronApi } from 'electron/types/ElectronApi';
+import { singleton } from '../../singleton';
+import { ElectronApi } from '../../types/ElectronApi';
 
 const processMap = new Map<string, ChildProcessWithoutNullStreams>();
 

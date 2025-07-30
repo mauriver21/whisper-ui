@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Body1, Box, Card, CardContent } from 'reactjs-ui-core';
 
 export const TranscribeAudioModule: React.FC = () => {
-  const [transcription, setTranscription] = useState([]);
+  const [transcription] = useState([]);
   const hasTranscription = Boolean(transcription.length);
 
   return (
@@ -21,7 +21,7 @@ export const TranscribeAudioModule: React.FC = () => {
         <Card sx={{ minHeight: 200 }}>
           <CardContent sx={{ height: '100%' }}>
             {hasTranscription ? (
-              transcription.map((item) => <></>)
+              transcription.map(() => <></>)
             ) : (
               <Box
                 height="100%"

@@ -1,4 +1,3 @@
-export * from './buildPlist';
 export * from './createDirectory';
 export * from './dirExists';
 export * from './exec';

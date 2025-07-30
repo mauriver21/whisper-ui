@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { fileURLToPath } from 'node:url';
-import { ElectronApi } from 'electron/types/ElectronApi';
+import { ElectronApi } from './types/ElectronApi';
 import path from 'node:path';
 import {
   exec,
@@ -18,7 +18,7 @@ import {
   unwatchDirs,
   spawn,
   writeFile,
-} from 'electron/commands';
+} from './commands';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname, '..');

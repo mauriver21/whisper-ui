@@ -1,6 +1,6 @@
 import { watch } from 'chokidar';
-import { singleton } from 'electron/singleton';
-import { ElectronApi } from 'electron/types/ElectronApi';
+import { singleton } from '../../singleton';
+import { ElectronApi } from '../../types/ElectronApi';
 import { v4 as uuid } from 'uuid';
 
 export const watchDirs = (

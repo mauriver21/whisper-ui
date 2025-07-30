@@ -13,6 +13,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     'no-async-promise-executor': 'off',
     'no-useless-catch': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     'react-refresh/only-export-components': [
       'warn',

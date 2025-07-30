@@ -1,4 +1,4 @@
-import { singleton } from 'electron/singleton';
+import { singleton } from '../../singleton';
 
 export const unwatchDirs = async () => {
   for (const watcher of singleton.watchers) {
