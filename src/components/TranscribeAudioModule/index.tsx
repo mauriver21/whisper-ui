@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '@components/Button';
 import { InputAudio } from '@components/InputAudio';
-import { Body1, Body2, Box, Card, CardContent, Stack } from 'reactjs-ui-core';
+import { Body1, Box, Card, CardContent, Stack } from 'reactjs-ui-core';
 import { TextField } from 'reactjs-ui-form-fields';
 import { transcribeAudio } from '@utils/transcribeAudio';
 import { WhisperResult } from '@interfaces/WhisperResult';
+import { TranscriptionSegment } from '@components/TranscriptionSegment';
 
 export const TranscribeAudioModule: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -44,7 +45,7 @@ export const TranscribeAudioModule: React.FC = () => {
               <Stack spacing={1}>
                 {transcription?.segments.map((segment, index) =>
                   segment ? (
-                    <Body2 key={index}>{segment.text}</Body2>
+                    <TranscriptionSegment segment={segment} key={index} />
                   ) : (
                     <React.Fragment key={index} />
                   )
