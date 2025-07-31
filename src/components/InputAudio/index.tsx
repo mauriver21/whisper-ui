@@ -7,11 +7,13 @@ import { IconButton } from '@components/IconButton';
 import { showOpenDialog } from '@utils/showOpenDialog';
 
 export interface InputAudioProps {
+  disableAudioTools?: boolean;
   height?: number;
   onChange?: (audioPath: string) => void;
 }
 
 export const InputAudio: React.FC<InputAudioProps> = ({
+  disableAudioTools,
   height = 100,
   onChange,
 }) => {
@@ -39,7 +41,9 @@ export const InputAudio: React.FC<InputAudioProps> = ({
           position="relative"
           sx={{
             '& .audio-tools': { display: 'none' },
-            '&:hover .audio-tools': { display: 'block' },
+            ...(disableAudioTools
+              ? {}
+              : { '&:hover .audio-tools': { display: 'block' } }),
           }}
         >
           <AudioPlayer url={`file://${audioPath}`} height={height} />

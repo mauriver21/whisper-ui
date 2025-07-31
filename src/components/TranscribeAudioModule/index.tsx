@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Button } from '@components/Button';
 import { InputAudio } from '@components/InputAudio';
-import { Body1, Box, Card, CardContent } from 'reactjs-ui-core';
+import { Body1, Body2, Box, Card, CardContent, Stack } from 'reactjs-ui-core';
 import { TextField } from 'reactjs-ui-form-fields';
 import { transcribeAudio } from '@commands/transcribeAudio';
 
 export const TranscribeAudioModule: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [filePath, setFilepath] = useState('');
-  const [transcription] = useState([]);
-  const hasTranscription = Boolean(transcription.length);
+  const [transcription, setTranscription] = useState('');
+  const hasTranscription = Boolean(transcription);
 
   const generateTranscription = async () => {
     try {
       setLoading(true);
       const result = await transcribeAudio({ filePath });
-      console.log(result);
+      setTranscription(result.stdOut);
     } finally {
       setLoading(false);
     }
@@ -32,6 +32,7 @@ export const TranscribeAudioModule: React.FC = () => {
         <Card>
           <CardContent>
             <InputAudio
+              disableAudioTools={hasTranscription}
               onChange={(audioPath) => setFilepath(audioPath)}
               height={250}
             />
@@ -40,7 +41,17 @@ export const TranscribeAudioModule: React.FC = () => {
         <Card sx={{ minHeight: 200 }}>
           <CardContent sx={{ height: '100%' }}>
             {hasTranscription ? (
-              transcription.map(() => <></>)
+              <Stack spacing={1}>
+                {transcription
+                  .split(/\n/)
+                  .map((text, index) =>
+                    text ? (
+                      <Body2 key={index}>{text}</Body2>
+                    ) : (
+                      <React.Fragment key={index} />
+                    )
+                  )}
+              </Stack>
             ) : (
               <Box
                 height="100%"
