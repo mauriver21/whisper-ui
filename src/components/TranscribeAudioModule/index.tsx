@@ -1,14 +1,17 @@
 import React, { useRef, useState } from 'react';
 import { Button } from '@components/Button';
 import { InputAudio } from '@components/InputAudio';
-import { Body1, Box, Card, CardContent, Stack } from 'reactjs-ui-core';
+import { Body1, Box, Card, CardContent, Grid, Stack } from 'reactjs-ui-core';
 import { TextField } from 'reactjs-ui-form-fields';
-import { transcribeAudio } from '@utils/transcribeAudio';
 import { WhisperResult } from '@interfaces/WhisperResult';
 import { TranscriptionSegment } from '@components/TranscriptionSegment';
 import { AudioPlayerHandle } from '@components/AudioPlayer';
+import { useWhisperApiClient } from '@api-clients/useWhisperApiClient';
+import { WhisperModelsSelect } from '@components/WhisperModelsSelect';
+import { WhisperLanguagesSelect } from '@components/WhisperLanguagesSelect';
 
 export const TranscribeAudioModule: React.FC = () => {
+  const { transcribeAudio } = useWhisperApiClient();
   const audioPlayerRef = useRef<AudioPlayerHandle>(null);
   const [loading, setLoading] = useState(false);
   const [filePath, setFilepath] = useState('');
@@ -40,6 +43,18 @@ export const TranscribeAudioModule: React.FC = () => {
               onChange={(audioPath) => setFilepath(audioPath)}
               height={250}
             />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <WhisperModelsSelect />
+              </Grid>
+              <Grid item xs={4}>
+                <WhisperLanguagesSelect />
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
         <Card sx={{ minHeight: 320 }}>
