@@ -42,19 +42,20 @@ export const TranscribeAudioModule: React.FC = () => {
             />
           </CardContent>
         </Card>
-        <Card sx={{ minHeight: 200 }}>
-          <CardContent sx={{ height: '100%' }}>
+        <Card sx={{ minHeight: 320 }}>
+          <CardContent sx={{ height: '100%', pr: 1 }}>
             {hasTranscription ? (
-              <Stack spacing={1}>
+              <Stack height={320} overflow="auto" spacing={1}>
                 {transcription?.segments.map((segment, index) =>
                   segment ? (
-                    <TranscriptionSegment
-                      onClick={({ timestamp }) => {
-                        audioPlayerRef.current?.playFromTimestamp(timestamp);
-                      }}
-                      segment={segment}
-                      key={index}
-                    />
+                    <Box key={index} pr={1}>
+                      <TranscriptionSegment
+                        onClick={({ timestamp }) => {
+                          audioPlayerRef.current?.playFromTimestamp(timestamp);
+                        }}
+                        segment={segment}
+                      />
+                    </Box>
                   ) : (
                     <React.Fragment key={index} />
                   )
