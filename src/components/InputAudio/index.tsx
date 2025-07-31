@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { AudioPlayer } from '@components/AudioPlayer';
-import { Body1, Box } from 'reactjs-ui-core';
+import { Body1, Box, Icon } from 'reactjs-ui-core';
+import { FileFilter } from '@constants/enums';
+import { PencilIcon } from '@heroicons/react/24/solid';
+import { IconButton } from '@components/IconButton';
 
 export interface InputAudioProps {
   height?: number;
@@ -13,14 +16,36 @@ export const InputAudio: React.FC<InputAudioProps> = ({ height = 100 }) => {
     const {
       filePaths: [filePath],
       canceled,
-    } = await window.api.showOpenDialog({ title: 'Select audio' });
+    } = await window.api.showOpenDialog({
+      title: 'Select audio',
+      filters: FileFilter.Audios,
+    });
     if (canceled === false) setAudioPath(filePath);
   };
 
   return (
     <Box position="relative" height={height}>
       {audioPath ? (
-        <AudioPlayer url={`file://${audioPath}`} height={height} />
+        <Box
+          position="relative"
+          sx={{
+            '& .audio-tools': { display: 'none' },
+            '&:hover .audio-tools': { display: 'block' },
+          }}
+        >
+          <AudioPlayer url={`file://${audioPath}`} height={height} />
+          <Box
+            className="audio-tools"
+            zIndex={2}
+            position="absolute"
+            top={10}
+            right={10}
+          >
+            <IconButton onClick={selectAudioPath}>
+              <Icon strokeWidth={3} color="text.primary" render={PencilIcon} />
+            </IconButton>
+          </Box>
+        </Box>
       ) : (
         <Box
           onClick={selectAudioPath}
