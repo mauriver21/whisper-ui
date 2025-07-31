@@ -9,10 +9,12 @@ import { AudioPlayerHandle } from '@components/AudioPlayer';
 import { useWhisperApiClient } from '@api-clients/useWhisperApiClient';
 import { WhisperModelsSelect } from '@components/WhisperModelsSelect';
 import { WhisperLanguagesSelect } from '@components/WhisperLanguagesSelect';
+import { getRelativeScrollTop } from '@utils/getRelativeScrollTop';
 import { FormSchema, useSchema } from './useSchema';
 
 export const TranscribeAudioModule: React.FC = () => {
   const { transcribeAudio } = useWhisperApiClient();
+  const transcriptionPanelRef = useRef<HTMLDivElement>(null);
   const audioPlayerRef = useRef<AudioPlayerHandle>(null);
   const [loading, setLoading] = useState(false);
   const [transcription, setTranscription] = useState<WhisperResult>();
@@ -26,6 +28,23 @@ export const TranscribeAudioModule: React.FC = () => {
       setTranscription(await transcribeAudio(data));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onTimeChange = (seconds: number) => {
+    const segment = transcription?.segments.find(
+      (item) => seconds >= item.start && seconds < item.end
+    );
+
+    if (segment) {
+      const segmentStart = Math.floor(segment.start);
+      const container = transcriptionPanelRef.current;
+      const item = container?.querySelector?.(
+        `#segment-${segmentStart}`
+      ) as HTMLElement;
+      const relativeScrollTop = getRelativeScrollTop(container, item);
+      relativeScrollTop !== undefined &&
+        container?.scrollTo({ top: relativeScrollTop });
     }
   };
 
@@ -44,6 +63,9 @@ export const TranscribeAudioModule: React.FC = () => {
           <Card>
             <CardContent>
               <InputAudio
+                onTimeChange={(args) => {
+                  onTimeChange(args.seconds);
+                }}
                 control={form.control}
                 name="filePath"
                 audioPlayerRef={audioPlayerRef}
@@ -70,24 +92,33 @@ export const TranscribeAudioModule: React.FC = () => {
           <Card sx={{ minHeight: 320 }}>
             <CardContent sx={{ height: '100%', pr: 1 }}>
               {hasTranscription ? (
-                <Stack height={320} overflow="auto" spacing={1}>
-                  {transcription?.segments.map((segment, index) =>
-                    segment ? (
-                      <Box key={index} pr={1}>
-                        <TranscriptionSegment
-                          onClick={({ timestamp }) => {
-                            audioPlayerRef.current?.playFromTimestamp(
-                              timestamp
-                            );
-                          }}
-                          segment={segment}
-                        />
-                      </Box>
-                    ) : (
-                      <React.Fragment key={index} />
-                    )
-                  )}
-                </Stack>
+                <div
+                  style={{ height: 320, overflow: 'auto' }}
+                  ref={transcriptionPanelRef}
+                >
+                  <Stack spacing={1}>
+                    {transcription?.segments.map((segment, index) =>
+                      segment ? (
+                        <Box
+                          id={`segment-${Math.floor(segment.start)}`}
+                          key={index}
+                          pr={1}
+                        >
+                          <TranscriptionSegment
+                            onClick={({ timestamp }) => {
+                              audioPlayerRef.current?.playFromTimestamp(
+                                timestamp
+                              );
+                            }}
+                            segment={segment}
+                          />
+                        </Box>
+                      ) : (
+                        <React.Fragment key={index} />
+                      )
+                    )}
+                  </Stack>
+                </div>
               ) : (
                 <Box
                   height="100%"

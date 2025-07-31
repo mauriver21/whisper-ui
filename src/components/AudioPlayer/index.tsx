@@ -1,4 +1,10 @@
-import { useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import {
+  useRef,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+} from 'react';
 import { ElapsedTime } from '@components/ElapsedTime';
 import { WavesurferProps, useWavesurfer } from '@wavesurfer/react';
 import { PauseIcon, PlayIcon } from '@assets/icons/24/solid';
@@ -8,6 +14,7 @@ import { IconButton } from '@components/IconButton';
 export interface AudioPlayerProps extends WavesurferProps {
   sx?: StackProps['sx'];
   errorMessage?: string;
+  onTimeChange?: (args: { seconds: number }) => void;
 }
 
 export type AudioPlayerHandle = {
@@ -15,7 +22,7 @@ export type AudioPlayerHandle = {
 };
 
 export const AudioPlayer = forwardRef<AudioPlayerHandle, AudioPlayerProps>(
-  ({ url, sx, height = 100, ...rest }, ref) => {
+  ({ url, sx, height = 100, onTimeChange, ...rest }, ref) => {
     const [state, setState] = useState({ played: false });
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -44,8 +51,13 @@ export const AudioPlayer = forwardRef<AudioPlayerHandle, AudioPlayerProps>(
 
     const durationMs = (wavesurfer?.getDuration() || 0) * 1000;
     const endTime = state.played ? currentTime * 1000 : durationMs;
+    const currentTimeFloor = Math.floor(currentTime);
 
     useImperativeHandle(ref, () => ({ playFromTimestamp }));
+
+    useEffect(() => {
+      onTimeChange?.({ seconds: currentTimeFloor });
+    }, [currentTimeFloor]);
 
     return (
       <Stack

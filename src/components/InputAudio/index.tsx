@@ -12,6 +12,7 @@ export interface InputAudioProps extends FieldProps {
   height?: number;
   onChange?: (audioPath: string) => void;
   audioPlayerRef?: React.ForwardedRef<AudioPlayerHandle>;
+  onTimeChange?: (args: { seconds: number }) => void;
 }
 
 export const InputAudio: React.FC<InputAudioProps> = ({
@@ -22,6 +23,7 @@ export const InputAudio: React.FC<InputAudioProps> = ({
   control,
   name,
   fieldOptions,
+  onTimeChange,
 }) => {
   const [audioPath, setAudioPath] = useState('');
 
@@ -63,6 +65,7 @@ export const InputAudio: React.FC<InputAudioProps> = ({
               }}
             >
               <AudioPlayer
+                onTimeChange={onTimeChange}
                 ref={audioPlayerRef}
                 url={`file://${audioPath}`}
                 height={height}
