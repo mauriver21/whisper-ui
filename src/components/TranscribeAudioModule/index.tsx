@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import { Button } from '@components/Button';
 import { InputAudio } from '@components/InputAudio';
-import React, { useState } from 'react';
 import { Body1, Box, Card, CardContent } from 'reactjs-ui-core';
+import { TextField } from 'reactjs-ui-form-fields';
 
 export const TranscribeAudioModule: React.FC = () => {
   const [transcription] = useState([]);
@@ -9,7 +10,12 @@ export const TranscribeAudioModule: React.FC = () => {
 
   return (
     <Box maxWidth={1280} width="100%" marginX="auto">
-      <Box display="grid" p={2} rowGap={3} gridTemplateRows="330px 1fr">
+      <Box display="grid" p={2} rowGap={3}>
+        <Card>
+          <CardContent>
+            <TextField placeholder="Project Name..." />
+          </CardContent>
+        </Card>
         <Card>
           <CardContent>
             <InputAudio height={250} />
