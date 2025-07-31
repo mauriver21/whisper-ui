@@ -19,6 +19,7 @@ import {
   spawn,
   writeFile,
 } from './commands';
+import { singleton } from './singleton';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname, '..');
@@ -30,8 +31,6 @@ export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : RENDERER_DIST;
-
-let win: BrowserWindow | null;
 
 ipcMain.handle(ElectronApi.GetAppPath, getAppPath);
 ipcMain.handle(ElectronApi.ExecCommand, exec);
@@ -50,7 +49,7 @@ ipcMain.handle(ElectronApi.WatchDirs, watchDirs);
 ipcMain.handle(ElectronApi.UnwatchDirs, unwatchDirs);
 
 function createWindow() {
-  win = new BrowserWindow({
+  singleton.mainWindow = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
@@ -61,6 +60,8 @@ function createWindow() {
       webSecurity: false,
     },
   });
+
+  const { mainWindow: win } = singleton;
 
   win.webContents.openDevTools();
   win.webContents.on('did-finish-load', () => {
@@ -77,7 +78,7 @@ function createWindow() {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
-    win = null;
+    singleton.mainWindow = undefined;
   }
 });
 

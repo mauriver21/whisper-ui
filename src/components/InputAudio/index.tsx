@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AudioPlayer } from '@components/AudioPlayer';
 import { Body1, Box, Icon } from 'reactjs-ui-core';
 import { FileFilter } from '@constants/enums';
@@ -8,9 +8,13 @@ import { showOpenDialog } from '@utils/showOpenDialog';
 
 export interface InputAudioProps {
   height?: number;
+  onChange?: (audioPath: string) => void;
 }
 
-export const InputAudio: React.FC<InputAudioProps> = ({ height = 100 }) => {
+export const InputAudio: React.FC<InputAudioProps> = ({
+  height = 100,
+  onChange,
+}) => {
   const [audioPath, setAudioPath] = useState('');
 
   const selectAudioPath = async () => {
@@ -24,8 +28,12 @@ export const InputAudio: React.FC<InputAudioProps> = ({ height = 100 }) => {
     if (canceled === false) setAudioPath(filePath);
   };
 
+  useEffect(() => {
+    audioPath && onChange?.(audioPath);
+  }, [audioPath]);
+
   return (
-    <Box position="relative" height={height}>
+    <Box position="relative">
       {audioPath ? (
         <Box
           position="relative"

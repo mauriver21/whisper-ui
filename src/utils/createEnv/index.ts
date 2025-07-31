@@ -13,6 +13,7 @@ export const createEnv = () => {
   const initEnv = async () => {
     ENV.DIRNAME = await getAppPath();
     ENV.HOME = (await execCommand('echo $HOME')).stdOut.trim();
+    ENV.PYTHON_SCRIPTS_PATH = `${ENV.DIRNAME}/python`;
   };
 
   const dirname = () => ENV.DIRNAME;
