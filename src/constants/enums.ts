@@ -10,3 +10,11 @@ export const FileFilter = {
     { extensions: ['exe', 'msi', 'bat', 'cmd'], name: 'executables' },
   ],
 };
+
+export enum WhisperModel {
+  Tiny = 'tiny',
+  Base = 'base',
+  Small = 'small',
+  Medium = 'medium',
+  Large = 'large',
+}

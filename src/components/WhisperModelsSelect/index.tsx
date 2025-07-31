@@ -1,3 +1,4 @@
+import { WhisperModel } from '@constants/enums';
 import { useMemo } from 'react';
 import { Select, SelectProps } from 'reactjs-ui-form-fields';
 
@@ -8,10 +9,11 @@ export const WhisperModelsSelect: React.FC<WhisperModelsSelectProps> = (
 ) => {
   const options = useMemo(
     () => [
-      { value: 'tiny', label: 'Tiny' },
-      { value: 'base', label: 'Base' },
-      { value: 'small', label: 'Small' },
-      { value: 'large', label: 'Large' },
+      { value: WhisperModel.Tiny, label: 'Tiny' },
+      { value: WhisperModel.Base, label: 'Base' },
+      { value: WhisperModel.Small, label: 'Small' },
+      { value: WhisperModel.Medium, label: 'Medium' },
+      { value: WhisperModel.Large, label: 'Large' },
     ],
     []
   );
