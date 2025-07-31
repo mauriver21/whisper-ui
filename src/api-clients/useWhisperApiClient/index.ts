@@ -10,16 +10,12 @@ export const useWhisperApiClient = () => {
     model: WhisperModel;
     language?: string;
   }) => {
-    const { filePath, model = WhisperModel.Medium, ...rest } = args;
-    let { language } = rest;
-    language =
-      language === 'auto' || language === undefined ? '' : `"${language}"`;
-
+    const { filePath, model = WhisperModel.Medium, language } = args;
     const command = py([
       'transcribe.py',
       `"${filePath}"`,
       `"${model}"`,
-      language,
+      `"${language}"`,
     ]);
     const result = await execCommand(command);
     return jsonParse<WhisperResult>(result.stdOut);

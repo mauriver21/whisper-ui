@@ -10,5 +10,5 @@ export const py = (cmd: string | string[]) => {
     result = cmd.join(' ');
   }
 
-  return `${PYTHON_SCRIPTS_PATH}/.venv/bin/python ${PYTHON_SCRIPTS_PATH}/${cmd}`;
+  return `${PYTHON_SCRIPTS_PATH}/.venv/bin/python ${PYTHON_SCRIPTS_PATH}/${result}`;
 };
