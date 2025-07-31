@@ -1,5 +1,5 @@
-import { AudioPlayer } from '@components/AudioPlayer';
 import { Button } from '@components/Button';
+import { InputAudio } from '@components/InputAudio';
 import React, { useState } from 'react';
 import { Body1, Box, Card, CardContent } from 'reactjs-ui-core';
 
@@ -12,10 +12,7 @@ export const TranscribeAudioModule: React.FC = () => {
       <Box display="grid" p={2} rowGap={3} gridTemplateRows="330px 1fr">
         <Card>
           <CardContent>
-            <AudioPlayer
-              height={250}
-              url="https://cdn.freesound.org/previews/817/817943_5674468-lq.mp3"
-            />
+            <InputAudio height={250} />
           </CardContent>
         </Card>
         <Card sx={{ minHeight: 200 }}>
