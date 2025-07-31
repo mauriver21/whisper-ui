@@ -4,6 +4,7 @@ import { Body1, Box, Icon } from 'reactjs-ui-core';
 import { FileFilter } from '@constants/enums';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { IconButton } from '@components/IconButton';
+import { showOpenDialog } from '@utils/showOpenDialog';
 
 export interface InputAudioProps {
   height?: number;
@@ -16,7 +17,7 @@ export const InputAudio: React.FC<InputAudioProps> = ({ height = 100 }) => {
     const {
       filePaths: [filePath],
       canceled,
-    } = await window.api.showOpenDialog({
+    } = await showOpenDialog({
       title: 'Select audio',
       filters: FileFilter.Audios,
     });
