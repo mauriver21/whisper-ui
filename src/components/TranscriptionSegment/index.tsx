@@ -1,15 +1,19 @@
 import { ElapsedTime } from '@components/ElapsedTime';
 import { WhisperSegment } from '@interfaces/WhisperSegment';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Body2, Stack } from 'reactjs-ui-core';
 
 export interface TranscriptionSegmentProps {
   segment: WhisperSegment;
+  onClick?: (args: { timestamp: number }) => void;
 }
 
 export const TranscriptionSegment: React.FC<TranscriptionSegmentProps> = ({
   segment,
+  onClick,
 }) => {
+  const endTime = useMemo(() => segment.start * 1000, []);
+
   return (
     <Stack
       p={1}
@@ -23,10 +27,12 @@ export const TranscriptionSegment: React.FC<TranscriptionSegmentProps> = ({
       }}
       direction="row"
       spacing={2}
+      onClick={() => onClick?.({ timestamp: endTime })}
     >
       <ElapsedTime
-        startTime={segment.start * 1000}
-        endTime={segment.end * 1000}
+        sx={{ minWidth: 80 }}
+        startTime={0}
+        endTime={endTime}
         showAlwaysHours={false}
       />
       <Body2>{segment.text}</Body2>

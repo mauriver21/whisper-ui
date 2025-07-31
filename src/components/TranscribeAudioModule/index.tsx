@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button } from '@components/Button';
 import { InputAudio } from '@components/InputAudio';
 import { Body1, Box, Card, CardContent, Stack } from 'reactjs-ui-core';
@@ -6,8 +6,10 @@ import { TextField } from 'reactjs-ui-form-fields';
 import { transcribeAudio } from '@utils/transcribeAudio';
 import { WhisperResult } from '@interfaces/WhisperResult';
 import { TranscriptionSegment } from '@components/TranscriptionSegment';
+import { AudioPlayerHandle } from '@components/AudioPlayer';
 
 export const TranscribeAudioModule: React.FC = () => {
+  const audioPlayerRef = useRef<AudioPlayerHandle>(null);
   const [loading, setLoading] = useState(false);
   const [filePath, setFilepath] = useState('');
   const [transcription, setTranscription] = useState<WhisperResult>();
@@ -33,6 +35,7 @@ export const TranscribeAudioModule: React.FC = () => {
         <Card>
           <CardContent>
             <InputAudio
+              audioPlayerRef={audioPlayerRef}
               disableAudioTools={hasTranscription}
               onChange={(audioPath) => setFilepath(audioPath)}
               height={250}
@@ -45,7 +48,13 @@ export const TranscribeAudioModule: React.FC = () => {
               <Stack spacing={1}>
                 {transcription?.segments.map((segment, index) =>
                   segment ? (
-                    <TranscriptionSegment segment={segment} key={index} />
+                    <TranscriptionSegment
+                      onClick={({ timestamp }) => {
+                        audioPlayerRef.current?.playFromTimestamp(timestamp);
+                      }}
+                      segment={segment}
+                      key={index}
+                    />
                   ) : (
                     <React.Fragment key={index} />
                   )

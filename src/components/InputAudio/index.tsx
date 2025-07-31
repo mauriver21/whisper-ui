@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AudioPlayer } from '@components/AudioPlayer';
+import { AudioPlayer, AudioPlayerHandle } from '@components/AudioPlayer';
 import { Body1, Box, Icon } from 'reactjs-ui-core';
 import { FileFilter } from '@constants/enums';
 import { PencilIcon } from '@heroicons/react/24/solid';
@@ -10,12 +10,14 @@ export interface InputAudioProps {
   disableAudioTools?: boolean;
   height?: number;
   onChange?: (audioPath: string) => void;
+  audioPlayerRef?: React.ForwardedRef<AudioPlayerHandle>;
 }
 
 export const InputAudio: React.FC<InputAudioProps> = ({
   disableAudioTools,
   height = 100,
   onChange,
+  audioPlayerRef,
 }) => {
   const [audioPath, setAudioPath] = useState('');
 
@@ -46,7 +48,11 @@ export const InputAudio: React.FC<InputAudioProps> = ({
               : { '&:hover .audio-tools': { display: 'block' } }),
           }}
         >
-          <AudioPlayer url={`file://${audioPath}`} height={height} />
+          <AudioPlayer
+            ref={audioPlayerRef}
+            url={`file://${audioPath}`}
+            height={height}
+          />
           <Box
             className="audio-tools"
             zIndex={2}

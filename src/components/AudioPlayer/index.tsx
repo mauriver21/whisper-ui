@@ -26,7 +26,7 @@ export const AudioPlayer = forwardRef<AudioPlayerHandle, AudioPlayerProps>(
       progressColor: 'rgba(181, 197, 228, 1)',
       height,
       dragToSeek: true,
-      barHeight: 1.5,
+      barHeight: 1,
       ...rest,
     });
 
