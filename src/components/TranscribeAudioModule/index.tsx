@@ -3,19 +3,19 @@ import { Button } from '@components/Button';
 import { InputAudio } from '@components/InputAudio';
 import { Body1, Body2, Box, Card, CardContent, Stack } from 'reactjs-ui-core';
 import { TextField } from 'reactjs-ui-form-fields';
-import { transcribeAudio } from '@commands/transcribeAudio';
+import { transcribeAudio } from '@utils/transcribeAudio';
+import { WhisperResult } from '@interfaces/WhisperResult';
 
 export const TranscribeAudioModule: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [filePath, setFilepath] = useState('');
-  const [transcription, setTranscription] = useState('');
+  const [transcription, setTranscription] = useState<WhisperResult>();
   const hasTranscription = Boolean(transcription);
 
   const generateTranscription = async () => {
     try {
       setLoading(true);
-      const result = await transcribeAudio({ filePath });
-      setTranscription(result.stdOut);
+      setTranscription(await transcribeAudio({ filePath }));
     } finally {
       setLoading(false);
     }
@@ -42,15 +42,13 @@ export const TranscribeAudioModule: React.FC = () => {
           <CardContent sx={{ height: '100%' }}>
             {hasTranscription ? (
               <Stack spacing={1}>
-                {transcription
-                  .split(/\n/)
-                  .map((text, index) =>
-                    text ? (
-                      <Body2 key={index}>{text}</Body2>
-                    ) : (
-                      <React.Fragment key={index} />
-                    )
-                  )}
+                {transcription?.segments.map((segment, index) =>
+                  segment ? (
+                    <Body2 key={index}>{segment.text}</Body2>
+                  ) : (
+                    <React.Fragment key={index} />
+                  )
+                )}
               </Stack>
             ) : (
               <Box
